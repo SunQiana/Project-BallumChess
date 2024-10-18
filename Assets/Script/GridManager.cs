@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 namespace Grid
@@ -20,26 +21,44 @@ namespace Grid
 
         void Awake()
         {
-            grid = new Grid(20, 30, 1f);
+            grid = new Grid(20, 20, 10f);
             TryGetComponent<GridView>(out gridView);
         }
 
         void Start()
         {
-            gridView?.InitGridView(width, height, cellSize);
-            gridView.ChangeNodeState(new Vector2(20,14), NodeState.OnSelect);
-            gridView.ChangeNodeState(new Vector2(121,12), NodeState.OnSelect);
-            gridView.ChangeNodeState(new Vector2(12,12), NodeState.Block);
-            gridView.ChangeNodeState(new Vector2(30,14), NodeState.OnSelect);
-            gridView.ChangeNodeState(new Vector2(15,26), NodeState.OnSelect);
-            gridView.ChangeNodeState(new Vector2(15,26), NodeState.Block);
+            if (grid.TryGetAllPos(out Dictionary<Vector2, Vector3> posDic))
+            {
+                gridView?.InitGridView(posDic,this);
+            }
+        }
+
+        public void ChangeNodeState(Vector3 pos, NodeState state)
+        {
+            if (grid.TryGetXZ(pos, out int x, out int z))
+            {
+                Vector2 nodeXZ = new Vector2(x, z);
+                grid.SetValue(nodeXZ, 1);
+                gridView.ChangeNodeState(nodeXZ, 1);
+            }
+        }
+
+        public NodeState GetStateByInt(int value)
+        {
+            return value switch
+            {
+                0 => NodeState.Default,
+                1 => NodeState.OnSelect,
+                2 => NodeState.Block,
+                _ => NodeState.Default,
+            };
         }
 
         public enum NodeState
         {
-            Default,
-            OnSelect,
-            Block,
+            Default, //0
+            OnSelect, //1
+            Block, //2
         }
     }
 }

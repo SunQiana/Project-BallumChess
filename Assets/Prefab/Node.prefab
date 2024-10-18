@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9203863391059492602}
   m_Layer: 0
   m_Name: Node
-  m_TagString: Untagged
+  m_TagString: Grid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 3888705486628795843}
   m_Layer: 5
   m_Name: H Value
-  m_TagString: Untagged
+  m_TagString: Grid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -110,8 +110,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 4639532031844019024}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: Grid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -210,7 +210,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0.01}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &2734915383251168668
 Canvas:
@@ -287,7 +287,7 @@ GameObject:
   - component: {fileID: 8112855407425368203}
   m_Layer: 0
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: Grid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -335,7 +335,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 996d5865d507f784587044b49b7505d6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -384,7 +384,7 @@ GameObject:
   - component: {fileID: 2853613563450051482}
   m_Layer: 5
   m_Name: G Value
-  m_TagString: Untagged
+  m_TagString: Grid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -448,8 +448,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -521,7 +521,7 @@ GameObject:
   - component: {fileID: 3043506887314570139}
   m_Layer: 5
   m_Name: F Value
-  m_TagString: Untagged
+  m_TagString: Grid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -583,8 +583,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

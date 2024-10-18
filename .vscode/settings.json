@@ -52,5 +52,5 @@
         "Temp/": true
     },
     "dotnet.preferCSharpExtension": true,
-    "dotnet.defaultSolution": "Project BellumChess.sln"
+    "dotnet.defaultSolution": "Project-BallumChess.sln"
 }

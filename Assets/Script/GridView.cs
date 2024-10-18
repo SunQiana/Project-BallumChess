@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace Grid
@@ -22,39 +23,36 @@ namespace Grid
         [ColorUsage(false, true)]
         Color blockColor = Color.blue;
 
-        Dictionary<Vector2, GameObject> nodeDic = new();
+        GridManager gridManager;
+        GameObject gridBase;
+        Dictionary<Vector2, GameObject> nodes = new();
 
-        public void InitGridView(int widthX, int heightZ, float cellSize, Vector3 origPos = new())
+        public void InitGridView(Dictionary<Vector2, Vector3> posDic, GridManager gridManager)
         {
-            GameObject gridBase = new("GridBase");
+            this.gridManager = gridManager;
+            gridBase = new("GridBase");
 
-            for (int x = 0; x < widthX; x++)
-            {
-                for (int z = 0; z < heightZ; z++)
-                {
-                    Vector3 spawnPos = new Vector3(x * cellSize + origPos.x, 0, z * cellSize + origPos.z);
-                    Vector2 indexKey = new Vector2(x, z);
-
-                    SpawnNode(spawnPos, indexKey);
-                }
-            }
-
-            void SpawnNode(Vector3 pos, Vector2 indexKey)
-            {
-                GameObject go = Instantiate(nodeView, pos, Quaternion.identity);
-                go.transform.SetParent(gridBase.transform);
-                go.name = "Node" + indexKey;
-
-                nodeDic.Add(indexKey, go);
-            }
+            foreach (var item in posDic)
+                SpawnNode(item.Key, item.Value);
         }
 
-        public void ChangeNodeState(Vector2 nodeKey, GridManager.NodeState state)
+        void SpawnNode(Vector2 XZ, Vector3 pos)
+        {
+            GameObject go = Instantiate(nodeView, pos, Quaternion.identity);
+            go.transform.SetParent(gridBase.transform);
+            go.name = "Node" + XZ;
+
+            nodes.Add(XZ, go);
+        }
+
+        public void ChangeNodeState(Vector2 nodeKey, int state)
         {
             if (IfKeyInvalid(nodeKey, out GameObject node))
                 return;
 
-            if (!node.TryGetComponent<Renderer>(out Renderer renderer) || renderer.material == null)
+            var renderer = node?.GetComponentInChildren<Renderer>();
+
+            if (renderer == null || renderer.material == null)
             {
                 Debug.LogError($"Can't Find Material On Node{nodeKey}");
                 return;
@@ -62,53 +60,47 @@ namespace Grid
 
             Material mat = renderer.material;
 
+            if (!mat.HasProperty("_BaseMap"))
+            {
+                Debug.LogError($"Can't Find Material Property On Node{nodeKey}");
+                return;
+            }
+
+            SetColor(state, mat);
+        }
+
+        void SetColor(int value, Material mat)
+        {
+            GridManager.NodeState state = gridManager.GetStateByInt(value);
+
             switch (state)
             {
                 case GridManager.NodeState.Default:
-                    SetDefaultColor();
-                    break;
+                    {
+                        mat.SetColor("_BaseMap", defaultColor);
+                        break;
+                    }
 
                 case GridManager.NodeState.OnSelect:
-                    SetOnSelectColor();
-                    break;
+                    {
+                        mat.SetColor("_BaseColor", onSelectColor);
+                        break;
+                    }
 
                 case GridManager.NodeState.Block:
-                    SetBlockColor();
-                    break;
-            }
-
-            void SetDefaultColor()
-            {
-                if (mat.HasProperty("_BaseMap"))
-                {
-                    mat.SetColor("_BaseMap", defaultColor);
-                }
-            }
-
-            void SetOnSelectColor()
-            {
-
-                if (mat.HasProperty("_BaseMap"))
-                {
-                    mat.SetColor("_BaseColor", onSelectColor);
-                }
-            }
-
-            void SetBlockColor()
-            {
-                if (mat.HasProperty("_BaseMap"))
-                {
-                    mat.SetColor("_BaseMap", blockColor);
-                }
+                    {
+                        mat.SetColor("_BaseMap", blockColor);
+                        break;
+                    }
             }
         }
 
 
         bool IfKeyInvalid(Vector2 nodeKey, out GameObject node)
         {
-            if (nodeDic.ContainsKey(nodeKey))
+            if (nodes.ContainsKey(nodeKey))
             {
-                node = nodeDic[nodeKey];
+                node = nodes[nodeKey];
                 return false;
             }
 

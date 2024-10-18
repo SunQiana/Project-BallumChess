@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace Grid
 {
@@ -8,14 +9,14 @@ namespace Grid
         int width; //x
         int height; //z
         float cellSize;
-        float[,] gridArray;
+        int[,] gridArray;
 
         public Grid(int width, int height, float cellSize = 1f)
         {
             this.width = width;
             this.height = height;
             this.cellSize = cellSize;
-            gridArray = new float[width, height];
+            gridArray = new int[width, height];
         }
 
         bool IfGridPosInvalid(int x, int z)
@@ -29,12 +30,12 @@ namespace Grid
             return false;
         }
 
-        public Vector3 GetWorldPosByGridPos(int x, int z)
+        public Vector3 GetWorldPosByXZ(int x, int z)
         {
             return new Vector3(x * cellSize, 0, z * cellSize);
         }
 
-        public void SetValue(int x, int z, float value)
+        public void SetValue(int x, int z, int value)
         {
             if (IfGridPosInvalid(x, z))
                 return;
@@ -42,7 +43,7 @@ namespace Grid
             gridArray[x, z] = value;
         }
 
-        public void SetValue(Vector3 worldPos, float value)
+        public void SetValue(Vector3 worldPos, int value)
         {
             int x, z;
             TryGetXZ(worldPos, out x, out z);
@@ -88,6 +89,28 @@ namespace Grid
                 return true;
 
             return false;
+        }
+
+        public bool TryGetAllPos(out Dictionary<Vector2, Vector3> posDic)
+        {
+            posDic = new Dictionary<Vector2, Vector3>();
+
+            if (gridArray == null)
+            {
+                Debug.LogError("Grid Array IS Null");
+                return false;
+            }
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int z = 0; z < height; z++)
+                {
+                    Vector2 nodeXZ = new Vector2(x, z);
+                    posDic.Add(nodeXZ, GetWorldPosByXZ(x, z));
+                }
+            }
+
+            return true;
         }
 
         public void GenDebugGridLine(int x, int z, CancellationToken token)
