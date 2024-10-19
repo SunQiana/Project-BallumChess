@@ -6,9 +6,8 @@ using UnityEngine;
 
 namespace Grid
 {
-    public class GridView : MonoBehaviour
+    public class GridView
     {
-        [SerializeField]
         GameObject nodeView;
 
         [SerializeField]
@@ -27,25 +26,35 @@ namespace Grid
         GameObject gridBase;
         Dictionary<Vector2, GameObject> nodes = new();
 
-        public void InitGridView(Dictionary<Vector2, Vector3> posDic, GridManager gridManager)
+        public GridView(Dictionary<Vector2, Vector3> posDic, GridManager gridManager)
         {
             this.gridManager = gridManager;
             gridBase = new("GridBase");
+            nodeView = GameManager.Instance.GetAssetByName<GameObject>("nodeView");
+
+            Debug.Log(nodeView);
 
             foreach (var item in posDic)
-                SpawnNode(item.Key, item.Value);
+                SpawnNodeView(item.Key, item.Value);
         }
 
-        void SpawnNode(Vector2 XZ, Vector3 pos)
+        void SpawnNodeView(Vector2 XZ, Vector3 pos)
         {
-            GameObject go = Instantiate(nodeView, pos, Quaternion.identity);
+            GameManager.Instance.TryInstantiateObject(nodeView, out Object result, pos);
+            GameObject go = result as GameObject;
+            if (go == null)
+            {
+                Debug.LogError("Faild To InstantiateObject");
+                return;
+            }
+
             go.transform.SetParent(gridBase.transform);
             go.name = "Node" + XZ;
 
             nodes.Add(XZ, go);
         }
 
-        public void ChangeNodeState(Vector2 nodeKey, int state)
+        public void ChangeNodeViewByState(Vector2 nodeKey, int state)
         {
             if (IfKeyInvalid(nodeKey, out GameObject node))
                 return;

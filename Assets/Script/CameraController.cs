@@ -9,13 +9,11 @@ public class CameraController
     float moveSpeed = 50f;
     float rotationSpeed = 100f;
     float verticalSpeed = 50f;
+    public Camera camera;
 
-    Camera camera;
-
-
-    public CameraController(Camera Camera)
+    public CameraController()
     {
-        this.camera = Camera;
+        GameManager.Instance.TrySetMainCamera(this);
     }
 
     public void MoveUp()

@@ -5,32 +5,17 @@ using UnityEngine;
 
 namespace Grid
 {
-    public class GridManager : MonoBehaviour
+    public class GridManager
     {
-        [SerializeField]
-        int height = 50; //z 
-
-        [SerializeField]
-        int width = 50; //x
-
-        [SerializeField]
-        float cellSize;
-
         Grid grid;
-        GridView gridView;
+        GridView view;
 
-        void Awake()
+        public GridManager(int width, int height, float cellSize)
         {
-            grid = new Grid(20, 20, 10f);
-            TryGetComponent<GridView>(out gridView);
-        }
+            grid = new Grid(width, height, cellSize);
+            grid.TryGetAllPos(out Dictionary<Vector2, Vector3> posDic);
 
-        void Start()
-        {
-            if (grid.TryGetAllPos(out Dictionary<Vector2, Vector3> posDic))
-            {
-                gridView?.InitGridView(posDic,this);
-            }
+            view = new GridView(posDic, this);
         }
 
         public void ChangeNodeState(Vector3 pos, NodeState state)
@@ -39,7 +24,7 @@ namespace Grid
             {
                 Vector2 nodeXZ = new Vector2(x, z);
                 grid.SetValue(nodeXZ, 1);
-                gridView.ChangeNodeState(nodeXZ, 1);
+                view.ChangeNodeViewByState(nodeXZ, 1);
             }
         }
 
