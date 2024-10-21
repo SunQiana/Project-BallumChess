@@ -9,6 +9,7 @@ public class CameraController
     float moveSpeed = 50f;
     float rotationSpeed = 100f;
     float verticalSpeed = 50f;
+    float accerlarateValue = 3f;
     public Camera camera;
 
     public CameraController()
@@ -28,22 +29,22 @@ public class CameraController
 
     public void MoveFoward()
     {
-        camera.transform.Translate(0, 0, moveSpeed * Time.deltaTime, Space.World);
+        camera.transform.Translate(0, 0, moveSpeed * Time.deltaTime, Space.Self);
     }
 
     public void MoveBackward()
     {
-        camera.transform.Translate(0, 0, -moveSpeed * Time.deltaTime, Space.World);
+        camera.transform.Translate(0, 0, -moveSpeed * Time.deltaTime, Space.Self);
     }
 
     public void MoveLeft()
     {
-        camera.transform.Translate(-moveSpeed * Time.deltaTime, 0, 0, Space.World);
+        camera.transform.Translate(-moveSpeed * Time.deltaTime, 0, 0, Space.Self);
     }
 
     public void MoveRight()
     {
-        camera.transform.Translate(moveSpeed * Time.deltaTime, 0, 0, Space.World);
+        camera.transform.Translate(moveSpeed * Time.deltaTime, 0, 0, Space.Self);
     }
 
     public void MoveRotateLeft()
@@ -54,6 +55,17 @@ public class CameraController
     {
 
         camera.transform.Rotate(Vector3.up, -rotationSpeed * Time.deltaTime, Space.World);
+    }
 
+    public void EnableAccerlarate()
+    {
+        moveSpeed *= accerlarateValue;
+        verticalSpeed *= accerlarateValue;
+    }
+
+    public void DisableAccerlarate()
+    {
+        moveSpeed /= accerlarateValue;
+        verticalSpeed /= accerlarateValue;
     }
 }

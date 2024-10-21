@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
             return;
 
         if (info.collider.tag == "Grid")
-            grid.ChangeNodeState(info.point, GridManager.NodeState.OnSelect);
+            grid.NavChangeNodeState(info.point, GridManager.NavNodeState.OnSelect, Color.red);
     }
 
     public bool TryInstantiateObject(Object o, out Object result, Vector3 pos = new(), Quaternion rot = new())

@@ -1,36 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Grid
 {
     public class GridView
     {
         GameObject nodeView;
-
-        [SerializeField]
-        [ColorUsage(false, true)]
-        Color onSelectColor = Color.red;
-
-        [SerializeField]
-        [ColorUsage(false, true)]
-        Color defaultColor = Color.white;
-
-        [SerializeField]
-        [ColorUsage(false, true)]
-        Color blockColor = Color.blue;
-
-        GridManager gridManager;
         GameObject gridBase;
         Dictionary<Vector2, GameObject> nodes = new();
 
-        public GridView(Dictionary<Vector2, Vector3> posDic, GridManager gridManager)
+        public GridView(Dictionary<Vector2, Vector3> posDic, string nodeAssetName)
         {
-            this.gridManager = gridManager;
             gridBase = new("GridBase");
-            nodeView = GameManager.Instance.GetAssetByName<GameObject>("nodeView");
+            nodeView = GameManager.Instance.GetAssetByName<GameObject>(nodeAssetName);
 
             Debug.Log(nodeView);
 
@@ -54,7 +41,7 @@ namespace Grid
             nodes.Add(XZ, go);
         }
 
-        public void ChangeNodeViewByState(Vector2 nodeKey, int state)
+        public void ChangeNodeColor(Vector2 nodeKey, Color color)
         {
             if (IfKeyInvalid(nodeKey, out GameObject node))
                 return;
@@ -75,35 +62,27 @@ namespace Grid
                 return;
             }
 
-            SetColor(state, mat);
+            if (color == null)
+            {
+                Debug.LogError($"No Color Assigned When Trying To Change Color On Node{nodeKey}");
+                return;
+            }
+
+            mat.SetColor("_BaseMap", color);
         }
 
-        void SetColor(int value, Material mat)
+        public void ChangeNodeText(string textName, string text)
         {
-            GridManager.NodeState state = gridManager.GetStateByInt(value);
+            var texts = nodeView?.GetComponents<Text>();
 
-            switch (state)
+            foreach (var item in texts)
             {
-                case GridManager.NodeState.Default:
-                    {
-                        mat.SetColor("_BaseMap", defaultColor);
-                        break;
-                    }
-
-                case GridManager.NodeState.OnSelect:
-                    {
-                        mat.SetColor("_BaseColor", onSelectColor);
-                        break;
-                    }
-
-                case GridManager.NodeState.Block:
-                    {
-                        mat.SetColor("_BaseMap", blockColor);
-                        break;
-                    }
+                if (item.name == textName)
+                    item.text = text;
+                    
+                break;
             }
         }
-
 
         bool IfKeyInvalid(Vector2 nodeKey, out GameObject node)
         {

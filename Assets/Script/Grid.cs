@@ -4,19 +4,19 @@ using System.Collections.Generic;
 
 namespace Grid
 {
-    public class Grid
+    public class Grid<T>
     {
         int width; //x
         int height; //z
         float cellSize;
-        int[,] gridArray;
+        T[,] gridArray;
 
         public Grid(int width, int height, float cellSize = 1f)
         {
             this.width = width;
             this.height = height;
             this.cellSize = cellSize;
-            gridArray = new int[width, height];
+            gridArray = new T[width, height];
         }
 
         bool IfGridPosInvalid(int x, int z)
@@ -35,7 +35,7 @@ namespace Grid
             return new Vector3(x * cellSize, 0, z * cellSize);
         }
 
-        public void SetValue(int x, int z, int value)
+        public void SetValue(int x, int z, T value)
         {
             if (IfGridPosInvalid(x, z))
                 return;
@@ -43,7 +43,7 @@ namespace Grid
             gridArray[x, z] = value;
         }
 
-        public void SetValue(Vector3 worldPos, int value)
+        public void SetValue(Vector3 worldPos, T value)
         {
             int x, z;
             TryGetXZ(worldPos, out x, out z);
@@ -68,11 +68,11 @@ namespace Grid
             return true;
         }
 
-        public bool TryGetValue(int x, int z, out float value)
+        public bool TryGetValue(int x, int z, out T value)
         {
             if (IfGridPosInvalid(x, z))
             {
-                value = 0f;
+                value = default;
                 return false;
             }
 
@@ -80,7 +80,7 @@ namespace Grid
             return true;
         }
 
-        public bool TryGetValue(Vector3 worldPos, out float value)
+        public bool TryGetValue(Vector3 worldPos, out T value)
         {
             int x, z;
             TryGetXZ(worldPos, out x, out z);

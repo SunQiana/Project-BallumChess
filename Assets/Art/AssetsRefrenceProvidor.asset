@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fb0df3a650185e42b64a50524025dd6, type: 3}
   m_Name: AssetsRefrenceProvidor
   m_EditorClassIdentifier: 
-  nodeView: {fileID: 712566085137752534, guid: f348a94b77ec9ea4695d608686e2f034, type: 3}
+  NavNodeView: {fileID: 712566085137752534, guid: f348a94b77ec9ea4695d608686e2f034,
+    type: 3}

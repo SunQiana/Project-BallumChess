@@ -7,39 +7,38 @@ namespace Grid
 {
     public class GridManager
     {
-        Grid grid;
-        GridView view;
+        Grid<NavNodeState> navGrid;
+        GridView navGridView;
 
         public GridManager(int width, int height, float cellSize)
         {
-            grid = new Grid(width, height, cellSize);
-            grid.TryGetAllPos(out Dictionary<Vector2, Vector3> posDic);
+            navGrid = new Grid<NavNodeState>(width, height, cellSize);
+            navGrid.TryGetAllPos(out Dictionary<Vector2, Vector3> posDic);
 
-            view = new GridView(posDic, this);
+            navGridView = new GridView(posDic, "NavNodeView");
         }
 
-        public void ChangeNodeState(Vector3 pos, NodeState state)
+        public void NavChangeNodeState(Vector3 pos, NavNodeState state, Color color)
         {
-            if (grid.TryGetXZ(pos, out int x, out int z))
+            if (navGrid.TryGetXZ(pos, out int x, out int z))
             {
                 Vector2 nodeXZ = new Vector2(x, z);
-                grid.SetValue(nodeXZ, 1);
-                view.ChangeNodeViewByState(nodeXZ, 1);
+                navGrid.SetValue(nodeXZ, state);
+                navGridView.ChangeNodeColor(nodeXZ, color);
             }
         }
 
-        public NodeState GetStateByInt(int value)
+        public void NavChangeNodeValue(Vector3 pos, NavNodeState state, string valueName, float value)
         {
-            return value switch
+            if (navGrid.TryGetXZ(pos, out int x, out int z))
             {
-                0 => NodeState.Default,
-                1 => NodeState.OnSelect,
-                2 => NodeState.Block,
-                _ => NodeState.Default,
-            };
+                Vector2 nodeXZ = new Vector2(x, z);
+                navGrid.SetValue(nodeXZ, state);
+                navGridView.ChangeNodeText(valueName, value.ToString());
+            }
         }
-
-        public enum NodeState
+        
+        public enum NavNodeState
         {
             Default, //0
             OnSelect, //1

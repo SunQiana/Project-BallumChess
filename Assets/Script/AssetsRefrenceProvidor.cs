@@ -6,7 +6,7 @@ using System.Reflection;
 [CreateAssetMenu(fileName = "AssetsRefrenceProvidor", menuName = "AssetsRefrenceProvidor", order = 1)]
 public class AssetsRefrenceProvidor : ScriptableObject
 {
-    public GameObject nodeView;
+    public GameObject NavNodeView;
 
     public bool TryGetAsset(string assetName, out object asset)
     {
